@@ -1,0 +1,10 @@
+.pi/
+.vscode/
+.idea/
+
+__pycache__/
+
+_release/
+_temp/
+
+notes.md
