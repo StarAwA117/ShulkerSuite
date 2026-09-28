@@ -1,5 +1,5 @@
 import { world, system } from "@minecraft/server";
-import { isRealPlayer, Utils } from "data.js";
+import { isRealPlayer, Utils } from "./data.js";
 
 system.beforeEvents.startup.subscribe(event => {
 	event.customCommandRegistry.registerCommand({
@@ -83,7 +83,37 @@ system.beforeEvents.startup.subscribe(event => {
 			});
 		});
 	});
-}
 
+	event.customCommandRegistry.registerCommand({
+		name: "star:remove",
+		description: "Remove specified entities",
+		cheatsRequired: false,
+		mandatoryParameters: [{
+			name: "Entity",
+			type: "EntitySelector"
+		}],
+		permissionLevel: 2
+	}, (_, entities) => {
+		let entityCount = entities.length;
+		let removeCount = 0;
+		entities.forEach(entity => {
+			if (!isRealPlayer(entity) && entity.isValid) {
+				system.run(() => entity.remove());
+				removeCount ++;
+			}
+		});
+
+		if (removeCount === 0) return {
+			status: 1,
+			message: `Removal failed -> 0 / ${entityCount}`
+		}; else if (removeCount < entityCount) return {
+			status: 1,
+			message: `Partial removal failed -> ${removeCount} / ${entityCount}`
+		}; else return {
+			status: 0,
+			message: `Removal succeeded -> ${removeCount} / ${entityCount}`
+		};
+	});
+});
 
 
