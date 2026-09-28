@@ -1,0 +1,53 @@
+{
+	"format_version": 2,
+	"header": {
+		"description": "A addon that provides a suite of utilities for Minecraft Bedrock Edition",
+		"name": "ShulkerSuite",
+		"uuid": "0dbce4f8-cb3a-40df-bee8-a583868695e4",
+		"version": "1.0.0",
+		"min_engine_version": [1, 26, 50]
+	},
+	"metadata": {
+		"authors": [
+			"StarAwA117"
+		],
+		"license": "MIT",
+		"url": "https://github.com/StarAwA117/ShulkerSuite"
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "0378e4b0-12fb-4ce9-81ed-39ceddae4088",
+			"version": "1.0.0"
+		},
+		{
+			"language": "javascript",
+			"type": "script",
+			"uuid": "8c6f3a93-9479-4892-b85f-74f762d26de6",
+			"version": "1.0.0",
+			"entry": "scripts/main.js"
+		}
+	],
+	"dependencies": [
+		{
+			"module_name": "@minecraft/server",
+			"version": "beta"
+		},
+		{
+			"module_name": "@minecraft/server-ui",
+			"version": "beta"
+		},
+		{
+			"module_name": "@minecraft/server-admin",
+			"version": "beta"
+		},
+		{
+			"module_name": "@minecraft/server-gametest",
+			"version": "beta"
+		},
+		{
+			"uuid": "1efc7d80-b99a-4a70-a7a9-d52449b904bc",
+			"version": "1.0.0"
+		}
+	]
+}

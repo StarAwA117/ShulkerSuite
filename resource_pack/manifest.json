@@ -1,0 +1,30 @@
+{
+	"format_version": 2,
+	"header": {
+		"description": "A addon that provides a suite of utilities for Minecraft Bedrock Edition",
+		"name": "ShulkerSuite",
+		"uuid": "fc1494bf-5dc2-4984-bec6-78947b96aec1",
+		"version": "1.0.0",
+		"min_engine_version": [1, 26, 50]
+	},
+	"metadata": {
+		"authors": [
+			"StarAwA117"
+		],
+		"license": "MIT",
+		"url": "https://github.com/StarAwA117/ShulkerSuite"
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "1efc7d80-b99a-4a70-a7a9-d52449b904bc",
+			"version": "1.0.0"
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "0dbce4f8-cb3a-40df-bee8-a583868695e4",
+			"version": "1.0.0"
+		}
+	]
+}
