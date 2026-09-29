@@ -1,5 +1,6 @@
 import { world, system } from "@minecraft/server";
 import { beforeEvents } from "@minecraft/server-admin";
+import * as config from "./config.js";
 import { isRealPlayer, Basic, Display } from "./lib.js";
 
 system.beforeEvents.startup.subscribe(event => {
@@ -140,7 +141,7 @@ system.runTimeout(async () => {
 		}
 
 		// Server Entrance Closed
-		if (!featureToggle.server_entrance) {
+		if (!config.features.server_entrance) {
 			event.disconnect(`BLOCK: The server entrance has closed`);
 			console.warn(`BLOCK: A player can't join because of the server entrance\nName: ${name} PID: ${pid}`);
 		}
