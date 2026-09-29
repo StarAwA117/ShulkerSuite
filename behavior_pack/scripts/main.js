@@ -1,5 +1,5 @@
 import { world, system } from "@minecraft/server";
-import { isRealPlayer, Utils } from "./data.js";
+import { isRealPlayer, Basic, Display } from "./lib.js";
 
 system.beforeEvents.startup.subscribe(event => {
 	event.customCommandRegistry.registerCommand({
@@ -41,7 +41,7 @@ system.beforeEvents.startup.subscribe(event => {
 			caller.sendMessage(`§e# §fPermission: §i${player.playerPermissionLevel}`);
 			caller.sendMessage(`§l§6◆ §r§fDevice Info`);
 			caller.sendMessage(`§e# §fDevice: §i${player.clientSystemInfo.platformType}`);
-			caller.sendMessage(`§e# §fMemory: §i${Utils.formatMemoryTier(player.clientSystemInfo.memoryTier)}`);
+			caller.sendMessage(`§e# §fMemory: §i${Display.formatMemoryTier(player.clientSystemInfo.memoryTier)}`);
 			caller.sendMessage(`§e# §fInput: §i${player.inputInfo.lastInputModeUsed}`);
 			caller.sendMessage(`§e# §fGraphics: §i${player.graphicsMode}`);
 			caller.sendMessage(`§e# §fRender: §i${player.clientSystemInfo.maxRenderDistance}`);
@@ -77,7 +77,7 @@ system.beforeEvents.startup.subscribe(event => {
 			players.forEach(player => {
 				if (!isRealPlayer(player)) return;
 				const ping = player.getPing();
-				const pingColor = Utils.getPingColor(ping);
+				const pingColor = Display.getPingColor(ping);
 
 				caller.sendMessage(`§e# §f${player.name} -> ${pingColor}${ping}§r`);
 			});
