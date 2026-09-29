@@ -3,6 +3,13 @@ import { beforeEvents } from "@minecraft/server-admin";
 import * as config from "./config.js";
 import { isRealPlayer, Basic, Display } from "./lib.js";
 
+
+
+// Data Init
+let features;
+
+
+
 system.beforeEvents.startup.subscribe(event => {
 	event.customCommandRegistry.registerCommand({
 		name: "star:info",
@@ -116,6 +123,46 @@ system.beforeEvents.startup.subscribe(event => {
 			message: `Removal succeeded -> ${removeCount} / ${entityCount}`
 		};
 	});
+
+	event.customCommandRegistry.registerEnum("star:feature_keys", Object.keys(config.feature));
+
+	event.customCommandRegistry.registerCommand({
+		name: "star:feature",
+		description: "Look or set feature toggle",
+		cheatsRequired: false,
+		mandatoryParameters: [
+			{
+				name: "Feature",
+				enumName: "star:feature_keys",
+				type: "Enum"
+			}
+		]
+		optionalParameters: [
+			{
+				name: "Toggle",
+				type: "Boolean"
+			}
+		],
+		permissionLevel: 3
+	}, (_, feature, toggle) => {
+		if (Basic.isEmpty(toggle)) {
+			world.sendMessage(`§l§d◆ §r§f${feature}: ${features[feature]}`);
+
+			return {
+				status: 0,
+				message: `Succeed in Showing Feature State`
+			};
+		}
+
+		features[feature] = toggle;
+
+		world.setDynamicProperty("features_config", JSON.stringify(features));
+
+		return {
+			status: 0,
+			message: `Succeed in Setting ${feature} to ${toggle}`
+		};
+	});
 });
 
 
@@ -141,7 +188,7 @@ system.runTimeout(async () => {
 		}
 
 		// Server Entrance Closed
-		if (!config.features.server_entrance) {
+		if (!features.server_entrance) {
 			event.disconnect(`BLOCK: The server entrance has closed`);
 			console.warn(`BLOCK: A player can't join because of the server entrance\nName: ${name} PID: ${pid}`);
 		}
@@ -158,6 +205,15 @@ system.runTimeout(async () => {
 
 // Init
 system.run(() => {
+	// Get World Config
+	features = JSON.parse(world.getDynamicProperty("features_config"));
+
+	// Assign
+	features = { ...config.features, ...features };
+
+	// Set World Config
+	world.setDynamicProperty("features_config", JSON.stringify(features));
+
 	// Message
 	world.sendMessage("§l§d◆ §r§fLoad");
 });
