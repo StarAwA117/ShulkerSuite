@@ -153,3 +153,11 @@ system.runTimeout(async () => {
 		console.warn(`BLOCK: Player[${name}] will Join the world`);
 	});
 }, 100);
+
+
+
+// Init
+system.run(() => {
+	// Message
+	world.sendMessage("§l§d◆ §r§fLoad");
+});
