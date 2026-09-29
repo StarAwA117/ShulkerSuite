@@ -1,4 +1,5 @@
 import { world, system } from "@minecraft/server";
+import { beforeEvents } from "@minecraft/server-admin";
 import { isRealPlayer, Basic, Display } from "./lib.js";
 
 system.beforeEvents.startup.subscribe(event => {
@@ -117,3 +118,37 @@ system.beforeEvents.startup.subscribe(event => {
 });
 
 
+
+system.runTimeout(async () => {
+	// Check before Join
+	beforeEvents.asyncPlayerJoin.subscribe((event) => {
+		const name = event.name;
+		const pid = event.persistentId;
+
+		// Invalid PID
+		if (pid.replaceAll(" ", "") == "") {
+			event.disconnect(`BLOCK: Can't find your pid`);
+			console.warn(`BLOCK: Can't find pid \nName: ${name} PID: ${pid}`);
+			return false;
+		}
+
+		// Invalid Name
+		if (event.name.length < 4 || event.name.length > 31 || /[^a-zA-Z0-9\s_-]/.test(event.name)) {
+			event.disconnect(`BLOCK: Invalid name`);
+			console.warn(`BLOCK: Invalid name\nName: ${name} PID: ${pid}`);
+			return false;
+		}
+
+		// Server Entrance Closed
+		if (!featureToggle.server_entrance) {
+			event.disconnect(`BLOCK: The server entrance has closed`);
+			console.warn(`BLOCK: A player can't join because of the server entrance\nName: ${name} PID: ${pid}`);
+		}
+
+		// Allow Join
+		event.allowJoin();
+
+		// Message
+		console.warn(`BLOCK: Player[${name}] will Join the world`);
+	});
+}, 100);
