@@ -1,7 +1,7 @@
 import { world, system } from "@minecraft/server";
 import { beforeEvents } from "@minecraft/server-admin";
 import * as config from "./config.js";
-import { isRealPlayer, Basic, Display } from "./lib.js";
+import { isRealPlayer, Basic, Display, Data } from "./lib.js";
 
 
 

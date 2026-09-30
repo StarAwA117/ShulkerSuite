@@ -1,9 +1,13 @@
 import { Player } from "@minecraft/server";
 import { SimulatedPlayer } from "@minecraft/server-gametest";
 
+
+
 export function isRealPlayer(player) {
 	return player instanceof Player && !(player instanceof SimulatedPlayer);
 }
+
+
 
 export class Basic {
 	static randomInt(min, max) {
@@ -106,5 +110,74 @@ export class Display {
 		if (tps >= 15) return "Fair";
 		if (tps >= 10) return "Laggy";
 		return "Frozen";
+	}
+}
+
+
+
+class Data {
+	static cache = new Map();
+
+	static has(player) {
+		if (typeof player === "string") return this.cache.has(player);
+		if (isRealPlayer(player)) return this.cache.has(player.name);
+		throw new Error("Invalid Player");
+	}
+
+	static create(name) {
+		if (this.has(name)) return this.cache.get(name);
+
+		const data = {
+			temp: {},
+			perm: {},
+			_isCompleteInit: false
+		}
+
+		this.cache.set(name, data);
+
+		return data;
+	}
+
+	static get(player) {
+		if (typeof player === "string") return this.create(player);
+		if (isRealPlayer(player)) return this.create(player.name);
+		throw new Error("Invalid Player");
+	}
+
+	static load(player) {
+		const data = this.get(player);
+		const permData = (player.getDynamicProperty("data"));
+
+		if (permData) Object.assign(data.perm, JSON.parse(permData));
+
+		return data;
+	}
+
+	static init(player) {
+		const data = this.get(player);
+
+		if (data._isCompleteInit) return false;
+
+		this.load(player);
+
+		data._isCompleteInit = true;
+
+		return true;
+	}
+
+	static save(player) {
+		const data = this.get(player);
+
+		player.setDynamicProperty("data", JSON.stringify(data.perm));
+	}
+
+	static delete(player) {
+		if (typeof player === "string") this.cache.delete(player);
+		if (isRealPlayer(player)) this.cache.delete(player.name);
+	}
+
+	static remove(player) {
+		this.save(player);
+		this.delete(player);
 	}
 }
