@@ -32,19 +32,19 @@
 	"dependencies": [
 		{
 			"module_name": "@minecraft/server",
-			"version": "3.0.0-alpha"
+			"version": "beta"
 		},
 		{
 			"module_name": "@minecraft/server-ui",
-			"version": "3.0.0-alpha"
+			"version": "beta"
 		},
 		{
 			"module_name": "@minecraft/server-admin",
-			"version": "2.0.0-alpha"
+			"version": "beta"
 		},
 		{
 			"module_name": "@minecraft/server-gametest",
-			"version": "2.0.0-alpha"
+			"version": "beta"
 		},
 		{
 			"uuid": "1efc7d80-b99a-4a70-a7a9-d52449b904bc",
