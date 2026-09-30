@@ -124,7 +124,7 @@ system.beforeEvents.startup.subscribe(event => {
 		};
 	});
 
-	event.customCommandRegistry.registerEnum("star:feature_keys", Object.keys(config.feature));
+	event.customCommandRegistry.registerEnum("star:feature_keys", Object.keys(config.features));
 
 	event.customCommandRegistry.registerCommand({
 		name: "star:feature",
