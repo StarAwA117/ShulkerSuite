@@ -12,7 +12,8 @@
 			"StarAwA117"
 		],
 		"license": "MIT",
-		"url": "https://github.com/StarAwA117/ShulkerSuite"
+		"url": "https://github.com/StarAwA117/ShulkerSuite",
+		"product_type": "addon"
 	},
 	"modules": [
 		{

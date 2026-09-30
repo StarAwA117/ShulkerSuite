@@ -12,7 +12,8 @@
 			"StarAwA117"
 		],
 		"license": "MIT",
-		"url": "https://github.com/StarAwA117/ShulkerSuite"
+		"url": "https://github.com/StarAwA117/ShulkerSuite",
+		"product_type": "addon"
 	},
 	"modules": [
 		{
@@ -31,19 +32,19 @@
 	"dependencies": [
 		{
 			"module_name": "@minecraft/server",
-			"version": "beta"
+			"version": "3.0.0-alpha"
 		},
 		{
 			"module_name": "@minecraft/server-ui",
-			"version": "beta"
+			"version": "3.0.0-alpha"
 		},
 		{
 			"module_name": "@minecraft/server-admin",
-			"version": "beta"
+			"version": "2.0.0-alpha"
 		},
 		{
 			"module_name": "@minecraft/server-gametest",
-			"version": "beta"
+			"version": "2.0.0-alpha"
 		},
 		{
 			"uuid": "1efc7d80-b99a-4a70-a7a9-d52449b904bc",
