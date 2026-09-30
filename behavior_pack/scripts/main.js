@@ -7,9 +7,16 @@ import { isRealPlayer, Basic, Display } from "./lib.js";
 
 // Data Init
 let features;
+// World Start Time
+const worldStartTime = Date.now();
+// Last Time for TPS
+let lastTime = Date.now();
+// World TPS
+let currentTPS = 20;
 
 
 
+// Startup
 system.beforeEvents.startup.subscribe(event => {
 	event.customCommandRegistry.registerCommand({
 		name: "star:info",
@@ -89,6 +96,84 @@ system.beforeEvents.startup.subscribe(event => {
 				const pingColor = Display.getPingColor(ping);
 
 				caller.sendMessage(`§e# §f${player.name} -> ${pingColor}${ping}§r`);
+			});
+		});
+	});
+
+	event.customCommandRegistry.registerCommand({
+		name: "star:tps",
+		description: "Get world TPS data",
+		cheatsRequired: false,
+		permissionLevel: 0
+	},
+	(origin) => {
+		// Get the command sender
+		const caller = origin.sourceEntity;
+
+		// Check whether the command sender is a player
+		if (!isRealPlayer(caller)) return {
+			status: 1,
+			message: "This command must be run by a player"
+		};
+
+		// Display TPS string
+		const showTPS = currentTPS.toFixed(1);
+		caller.sendMessage(`§l§d◆ §r§uTPS: §f${showTPS}`);
+	});
+
+	event.customCommandRegistry.registerCommand({
+		name: "star:status",
+		description: "Show world status",
+		cheatsRequired: false,
+		optionalParameters: [{
+			name: "Player",
+			type: "PlayerSelector"
+		}],
+		permissionLevel: 2
+	},
+	(origin, players) => {
+		const caller = origin.sourceEntity;
+
+		if (!players) {
+			if (!caller || caller.typeId !== "minecraft:player") return {
+				status: 1,
+				message: "No target found to display"
+			}
+
+			players = [ caller ];
+		}
+
+		// Data collection
+		// Get current status
+		const status = Display.getWorldStatus(currentTPS);
+		// Calculate elapsed runtime
+		const runtime = Display.formatMS(Date.now() - worldStartTime);
+		// Display TPS string
+		const showTPS = currentTPS.toFixed(1);
+
+		system.run(() => {
+			// Player count
+			const playerCount = world.getPlayers().length;
+			// Day count
+			const dayCount = world.getDay();
+			// World spawn point
+			const spawnLocation = world.getDefaultSpawnLocation();
+
+			players.forEach(player => {
+				player.sendMessage(`§f// * §aWorld Status §f* //`);
+				player.sendMessage(`§l§6◆ §r§fBasic Info`);
+				player.sendMessage(`§e# §fStatus: §i${status}`);
+				player.sendMessage(`§e# §fRuntime: §i${runtime}`);
+				player.sendMessage(`§e# §fPlayers: §i${playerCount}`);
+				player.sendMessage(`§e# §fTPS: §i${showTPS}`);
+				player.sendMessage(`§l§6◆ §r§fWorld Info`);
+				player.sendMessage(`§e# §fDays: §i${dayCount}`);
+				player.sendMessage(`§e# §fSeed: §i${world.seed}`);
+				player.sendMessage(`§e# §fTick: §i${system.currentTick}`);
+				player.sendMessage(`§e# §fSpawn: §i( ${spawnLocation.x}, ${spawnLocation.y}, ${spawnLocation.z} )`);
+				player.sendMessage(`§e# §fisEditor: §i${system.isEditorWorld}`);
+				player.sendMessage(`§l§6◆ §r§fDev Info`);
+				player.sendMessage(`§e# §fMemory: §i${Display.formatMemoryTier(system.serverSystemInfo.memoryTier)}`);
 			});
 		});
 	});
@@ -200,6 +285,18 @@ system.runTimeout(async () => {
 		console.warn(`BLOCK: Player[${name}] will Join the world`);
 	});
 }, 100);
+
+
+
+// Interval
+// 20 tick = 1 s
+system.runInterval(() => {
+	// Compute World TPS
+	const now = Date.now();
+	currentTPS = 20 / ((now - lastTime) / 1000);
+	if (currentTPS >= 20) currentTPS = 20;
+	lastTime = now;
+});
 
 
 
