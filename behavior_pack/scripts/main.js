@@ -136,7 +136,7 @@ system.beforeEvents.startup.subscribe(event => {
 				enumName: "star:feature_keys",
 				type: "Enum"
 			}
-		]
+		],
 		optionalParameters: [
 			{
 				name: "Toggle",
@@ -206,7 +206,8 @@ system.runTimeout(async () => {
 // Init
 system.run(() => {
 	// Get World Config
-	features = JSON.parse(world.getDynamicProperty("features_config"));
+	const features_json = world.getDynamicProperty("features_config");
+	features = features_json ? JSON.parse(features_json) : {};
 
 	// Assign
 	features = { ...config.features, ...features };
