@@ -41,7 +41,7 @@ export class Basic {
 		}
 		return result;
 	}
-	
+
 	static isEmpty(value) {
 		if (value == null) return true;
 		if (typeof value === "string") return value.trim() === "";
@@ -70,6 +70,21 @@ export class Basic {
 			}
 		}
 		return len;
+	}
+}
+
+
+
+export class Functional {
+	static textCheck(message) {
+		// Length
+		if (Basic.getUtf8ByteLength(message) >= 256) throw new Error("Too many characters");
+
+		// Invalid
+		if (/[\u0300-\u036f]{3,}|\u200b|\u200c|\u200d|\u2060|\uFEFF/.test(message)) throw new Error("Invalid characters");
+
+		// Pass
+		return;
 	}
 }
 
@@ -115,7 +130,7 @@ export class Display {
 
 
 
-class Data {
+export class Data {
 	static cache = new Map();
 
 	static has(player) {

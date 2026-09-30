@@ -1,7 +1,7 @@
 import { world, system } from "@minecraft/server";
 import { beforeEvents } from "@minecraft/server-admin";
 import * as config from "./config.js";
-import { isRealPlayer, Basic, Display, Data } from "./lib.js";
+import { isRealPlayer, Basic, Functional, Display, Data } from "./lib.js";
 
 
 
@@ -285,6 +285,26 @@ system.runTimeout(async () => {
 		console.warn(`BLOCK: Player[${name}] will Join the world`);
 	});
 }, 100);
+
+
+
+// Chat Check
+world.beforeEvents.chatSend.subscribe(event => {
+	// Get
+	const message = event.message;
+	const player = event.sender;
+
+	// Permission
+	// if (player.playerPermissionLevel >= 2) return;
+
+	// Text Check
+	try {
+		Functional.textCheck(message);
+	} catch (e) {
+		player.sendMessage(`§l§c◆ §r§f${e.message}`);
+		event.cancel = true;
+	}
+});
 
 
 
