@@ -53,6 +53,12 @@ export class Basic {
 		if (typeof value === "number") return Number.isNaN(value);
 		return false;
 	}
+	
+	static sameType(a, b) {
+		if (a === null || b === null) return a === b;
+		if (Array.isArray(a) || Array.isArray(b)) return Array.isArray(a) && Array.isArray(b);
+		return typeof a === typeof b;
+	}
 
 	static getUtf8ByteLength(str) {
 		let len = 0;

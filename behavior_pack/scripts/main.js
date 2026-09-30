@@ -224,13 +224,18 @@ system.beforeEvents.startup.subscribe(event => {
 		],
 		optionalParameters: [
 			{
-				name: "Toggle",
-				type: "Boolean"
+				name: "Data",
+				type: "String"
 			}
 		],
 		permissionLevel: 3
-	}, (_, feature, toggle) => {
-		if (Basic.isEmpty(toggle)) {
+	}, (_, feature, dataRaw) => {
+		if (!(feature in features)) return {
+			status: 1,
+			message: `Unknown Feature`
+		};
+
+		if (Basic.isEmpty(dataRaw)) {
 			world.sendMessage(`§l§d◆ §r§f${feature}: ${features[feature]}`);
 
 			return {
@@ -239,13 +244,26 @@ system.beforeEvents.startup.subscribe(event => {
 			};
 		}
 
-		features[feature] = toggle;
+		let data;
+
+		try {
+			data = JSON.parse(dataRaw);
+		} catch {
+			data = dataRaw;
+		}
+
+		if (!Basic.sameType(data, features[feature])) return {
+			status: 1,
+			message: `Invalid Data`
+		};
+
+		features[feature] = data;
 
 		world.setDynamicProperty("features_config", JSON.stringify(features));
 
 		return {
 			status: 0,
-			message: `Succeed in Setting ${feature} to ${toggle}`
+			message: `Succeed in Setting ${feature} to ${data}`
 		};
 	});
 });
