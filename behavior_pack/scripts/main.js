@@ -290,6 +290,9 @@ system.runTimeout(async () => {
 
 // Chat Check
 world.beforeEvents.chatSend.subscribe(event => {
+	// No Check
+	if (!features.chat_check) return;
+
 	// Get
 	const message = event.message;
 	const player = event.sender;
